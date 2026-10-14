@@ -28,13 +28,41 @@ export function DealOutDeck({
     if (isVerifying || questions.length === 0) return;
     setIsVerifying(true);
     try {
-      const serverUrl = import.meta.env?.VITE_SERVER_URL || "";
-      const endpoint = `${serverUrl.replace(/\/+$/, "")}/api/quizzes/verify`;
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ questions }),
-      });
+      const serverUrl = import.meta.env?.VITE_SERVER_URL;
+      const directUrl = `http://${typeof window !== "undefined" ? window.location.hostname || "localhost" : "localhost"}:5001/api/quizzes/verify`;
+      let res;
+      if (serverUrl) {
+        res = await fetch(`${serverUrl.replace(/\/+$/, "")}/api/quizzes/verify`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ questions }),
+        });
+      } else {
+        try {
+          res = await fetch("/api/quizzes/verify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ questions }),
+          });
+          if (!res.ok && res.status >= 500 && import.meta.env.DEV) {
+            res = await fetch(directUrl, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ questions }),
+            });
+          }
+        } catch (fetchErr) {
+          if (import.meta.env.DEV) {
+            res = await fetch(directUrl, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ questions }),
+            });
+          } else {
+            throw fetchErr;
+          }
+        }
+      }
       const json = await res.json();
       if (json && json.success) {
         setAuditReport(json.data);
