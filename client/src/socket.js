@@ -3,13 +3,11 @@ import { io } from "socket.io-client";
 // Dynamically connect to the backend server
 const getSocketUrl = () => {
   if (import.meta.env?.VITE_SERVER_URL) return import.meta.env.VITE_SERVER_URL;
-  if (typeof window === "undefined") return "http://localhost:5001";
-  const { hostname, port } = window.location;
-  // If running on Vite dev server (port 5173, 5174, etc.)
-  if (port && port !== "5001") {
-    return `http://${hostname}:5001`;
-  }
-  return "/";
+  // In production (bundled build served by Express/Docker), connect to same origin
+  if (!import.meta.env.DEV) return "/";
+  // In local development (Vite dev server), point to backend port 5001
+  const hostname = typeof window !== "undefined" ? window.location.hostname || "localhost" : "localhost";
+  return `http://${hostname}:5001`;
 };
 
 export const socket = io(getSocketUrl(), {

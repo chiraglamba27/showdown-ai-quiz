@@ -84,21 +84,24 @@ export default function App() {
     );
   }
 
-  // Resilient API request with automatic direct backend fallback
+  // Resilient API request with automatic dev proxy/direct fallback
   const apiFetch = async (endpoint, options) => {
     const serverUrl = import.meta.env?.VITE_SERVER_URL;
     if (serverUrl) {
       return await fetch(`${serverUrl.replace(/\/+$/, "")}${endpoint}`, options);
     }
+    // In production, Express serves both static frontend and API on the same domain
+    if (!import.meta.env.DEV) {
+      return await fetch(endpoint, options);
+    }
     const hostname = typeof window !== "undefined" ? window.location.hostname || "localhost" : "localhost";
     const directUrl = `http://${hostname}:5001${endpoint}`;
     try {
       const res = await fetch(endpoint, options);
-      // If Vite proxy failed with 500/502/504 (e.g. EPERM or proxy timeout), try direct backend
+      // If Vite dev proxy failed, try direct backend
       if (!res.ok && res.status >= 500) {
         try {
-          const directRes = await fetch(directUrl, options);
-          return directRes;
+          return await fetch(directUrl, options);
         } catch {
           return res;
         }
