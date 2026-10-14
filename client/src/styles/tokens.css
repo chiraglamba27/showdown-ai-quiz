@@ -1,0 +1,100 @@
+:root {
+  /* Canvas & Paper Surfaces */
+  --bg-canvas: #090a0f;
+  --bg-surface: #11141e;
+  --bg-surface-raised: #181d2c;
+  --bg-paper: #f4ede0;
+  --bg-paper-subtle: #eae1d0;
+
+  /* Typography Colors */
+  --fg-bright: #ffffff;
+  --fg-body: #d1d5db;
+  --fg-muted: #7d8495;
+  --fg-dark: #0a0c12;
+
+  /* Hard Borders & Grid */
+  --border-ink: #000000;
+  --border-panel: #242a3a;
+  --border-light: rgba(255, 255, 255, 0.12);
+
+  /* Loud Accents */
+  --accent-vermilion: #ff371a;
+  --accent-lemon: #ffe500;
+  --accent-cyan: #00f0ff;
+
+  /* Game-Show 4 Channels */
+  --channel-a: #ff2d46; /* Triangle ▲ */
+  --channel-b: #1d68ff; /* Diamond ◆ */
+  --channel-c: #f59e0b; /* Circle ● */
+  --channel-d: #10b981; /* Square ■ */
+
+  /* Outcome Invariants */
+  --state-correct: #00e676;
+  --state-wrong: #ff1744;
+
+  /* Tactile Hard Offset Shadows */
+  --shadow-sm: 2px 2px 0px #000000;
+  --shadow-md: 4px 4px 0px #000000;
+  --shadow-lg: 6px 6px 0px #000000;
+  --shadow-xl: 10px 10px 0px #000000;
+  --shadow-vermilion: 5px 5px 0px #ff371a;
+  --shadow-lemon: 5px 5px 0px #ffe500;
+
+  /* Typography Families */
+  --font-display: "Bricolage Grotesque", -apple-system, sans-serif;
+  --font-heading: "Space Grotesk", sans-serif;
+  --font-body: "Instrument Sans", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+/* Custom Utilities for Poster Aesthetics */
+.font-display {
+  font-family: var(--font-display);
+}
+.font-heading {
+  font-family: var(--font-heading);
+}
+.font-body {
+  font-family: var(--font-body);
+}
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.hard-shadow-sm {
+  box-shadow: var(--shadow-sm);
+}
+.hard-shadow {
+  box-shadow: var(--shadow-md);
+}
+.hard-shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+.hard-shadow-xl {
+  box-shadow: var(--shadow-xl);
+}
+.hard-shadow-vermilion {
+  box-shadow: var(--shadow-vermilion);
+}
+.hard-shadow-lemon {
+  box-shadow: var(--shadow-lemon);
+}
+
+/* Mechanical Press Effect */
+.press-btn {
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+.press-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #000000;
+}
+.press-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #000000;
+}
+
+/* Halftone / Subtle Newsprint Grid */
+.bg-poster-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
